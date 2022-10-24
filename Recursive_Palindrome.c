@@ -2,12 +2,7 @@
 #include <ctype.h>
 #include <string.h>
 
-/* Program: Assignment 1 - Problem 2
- * Student: Martin Morales Arana
- * Class: Comp-2412-FA - Data Structures
- * Professor: Dr. Muhammad Asaduzzaman, TA: Ahmed Aboulfotouh
- *
- * Description: Program uses a recursive function to determine if a string
+/* Description: Program uses a recursive function to determine if a string
  * is a palindrome by checking if the extremes of the string are the same
  * i.e. if the first half is equal to the second half
 */
