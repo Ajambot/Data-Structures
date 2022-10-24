@@ -1,11 +1,6 @@
 #include <stdio.h>
 
-/* Program: Assignment 1 - Problem 3
- * Student: Martin Morales Arana
- * Class: Comp-2412-FA - Data Structures
- * Professor: Dr. Muhammad Asaduzzaman, TA: Ahmed Aboulfotouh
- *
- * Description: Program uses a recursive function to determine the minimum
+/* Description: Program uses a recursive function to determine the minimum
  * integer in an array. i is the offset and size is the size of the array
 */
 int minNum(int arr[], int i, int size)
