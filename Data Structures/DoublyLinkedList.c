@@ -1,11 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-/* Program: Lab 4
- * Student: Martin Morales Arana
- * Class: Comp-2412-FA - Data Structures
- * Professor: Dr. Muhammad Asaduzzaman, TA: Ahmed Aboulfotouh
- *
- * Description: Program implements a doubly linked list. Each node contains 2 pointers: one to the next element and
+/* Description: Program implements a doubly linked list. Each node contains 2 pointers: one to the next element and
  * one to the previous one. In main, we create a DLL (doubly linked list) and we insert 10 positive and 10 negative
  * numbers. We print the list, and then we create two sub-DLLs: one with only the positive numbers, and one with only
  * the negative numbers. We then print each list to verify they have been created correctly
