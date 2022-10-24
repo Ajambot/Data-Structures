@@ -1,11 +1,6 @@
 #include <stdio.h>
 
-/* Program: Assignment 1 - Problem 1
- * Student: Martin Morales Arana
- * Class: Comp-2412-FA - Data Structures
- * Professor: Dr. Muhammad Asaduzzaman, TA: Ahmed Aboulfotouh
- *
- * Description: Program uses a recursive function to determine the summation
+/* Description: Program uses a recursive function to determine the summation
  * of the numbers from 1 to n
 */
 
