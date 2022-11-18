@@ -91,7 +91,24 @@ void print(Node* root) {
     }
 }
 
+// Function to calculate the height of a tree
+int height(Node* root)
+{
+    if(root==NULL) // if empty subtree, height is -1
+        return -1;
+    return 1+fmax(height(root->left), height(root->right)); // else, height is 1 + max between height of left subtree and right subtree
+}
 
+// Function to check if a tree is balanced
+int isBalanced(Node* root)
+{
+    if(root==NULL) // If we reach a leaf, then the path to the leaf is balanced. return true
+        return 1;
+    // If the balance factor of the current root is <-1 or >1, tree is unbalanced. return false
+    if(height(root->left)-height(root->right)<-1 || (height(root->left)-height(root->right)>1))
+        return 0;
+    return isBalanced(root->left)&&isBalanced(root->right); // return false if any of the children is unbalanced, true otherwise
+}
 
 int main() {
     BST* bst = createBST(); // Create BST
