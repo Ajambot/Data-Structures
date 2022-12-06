@@ -1,0 +1,158 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Structure for the list of edges. An edge in the list represents and undirected edge between u and v with weight w
+typedef struct edgeList
+{
+    char u;
+    char v;
+    int w;
+}edgeList;
+
+// Bubble sorts the array of edges ascendingly by weight
+void sort(edgeList edges[], int n)
+{
+    // Bubble sort
+    for(int i=0; i<n; i++)
+    {
+        for(int o=0; o<n-i; o++)
+        {
+            if(edges[o].w > edges[o+1].w) // If current edge weight is bigger than next edge weight, swap them
+            {
+                // Swap edges position code
+                edgeList temp;
+                temp.u = edges[o+1].u;
+                temp.v = edges[o+1].v;
+                temp.w = edges[o+1].w;
+                edges[o+1].u = edges[o].u;
+                edges[o+1].v = edges[o].v;
+                edges[o+1].w = edges[o].w;
+                edges[o].u = temp.u;
+                edges[o].v = temp.v;
+                edges[o].w = temp.w;
+            }
+        }
+    }
+}
+
+// Given an array of edges and a size of the array, check if there is a cycle in the graph
+int isCycle(edgeList edges[], int n)
+{
+    int visited[256]; // Array of visited vertices
+    memset(visited, 0, 256*sizeof(int)); // Initialize visited array to 0
+    int ascii = (int)edges[0].u; // get the ascii value of the first vertex
+    visited[ascii] = 1; // Visit the first vertex
+    for(int i=0; i<n; i++) // for each edge in the array
+    {
+        ascii = (int)edges[i].v; // get the ascii value of the v vertex
+        if(visited[ascii]) // if we already visited it, there's a cycle. Return true
+            return 1;
+        visited[ascii]=1; // Visit v vertex
+    }
+    return 0;
+}
+
+// Given a graph, find and return the Minimum Spanning Tree using Kruskal's algorithm
+edgeList* findMST(edgeList edges[], int n)
+{
+    edgeList *MST = calloc(n, sizeof(MST)); // allocate memory for MST
+    int mstN = 0; // Represents the amount of elements in the MST
+    sort(edges, n); // Sort the list of edges by weight
+    for(int i=0; i<n; i++)
+    {
+        // Insert edge i to the MST
+        MST[mstN].u = edges[i].u;
+        MST[mstN].v = edges[i].v;
+        MST[mstN].w = edges[i].w;
+        // Check if there is a cycle with the new edge added. if there is don't add the edge to the MST, else add the edge
+        if(!isCycle(MST, mstN+1)) mstN++;
+    }
+    return MST; // return our resulting MST
+}
+
+// Prints a graph by printing the list of edges
+void Print(edgeList edges[], int n)
+{
+    // Traverse through every edge and print it
+    for(int i=0; i<n; i++)
+    {
+        printf("\t%c<->%c weight: %i\n", edges[i].u, edges[i].v, edges[i].w);
+    }
+}
+
+// Function to transform an adjacency matrix to an edge list. n is the amount of vertices
+// We return the edge list as a pointer and the amount of edges gets saved in parameter n
+edgeList* adjMatrixtoEdgeList(int matrix[26][26], int* n)
+{
+    edgeList *list = calloc(1000, sizeof(edgeList)); // Create and allocate memory for an edge list of a max of 1000 edges
+    int edgeAmnt=0; // holds current amount of edges
+    int vis[26][26]; // holds edges that we have saved, so we don't save an edge from u to v and an edge from v to u because the graph is undirected
+    memset(vis, 0, 26*26); // initialize all indexes in the array to 0
+    // Traverse the adjacency matrix
+    for(int i=0; i<*n; i++)
+    {
+        for(int o=0; o<*n; o++)
+        {
+            if(matrix[i][o] && !vis[o][i]) // If there exists an edge from u to v and we have not yet saved an edge from v to u
+            {
+                // Save new edge to our edge list
+                list[edgeAmnt].u = i+'A';
+                list[edgeAmnt].v = o+'A';
+                list[edgeAmnt].w = matrix[i][o];
+                edgeAmnt++; // Increment our amount of edges
+                vis[i][o]=1; // Visit the current edge
+            }
+        }
+    }
+    *n=edgeAmnt; // save our amount of edges to n
+    return list;
+}
+
+int main() {
+    int matrix[26][26]; // adjacency matrix. Can have vertices with keys from A-Z (all caps)
+    // Initialize matrix to 0
+    for(int i=0; i<26; i++)
+    {
+        for(int o=0; o<26; o++)
+            matrix[i][o] = 0;
+    }
+    // Edge from A to B with weight 5
+    matrix['A'-'A']['B'-'A'] = 5;
+    matrix['B'-'A']['A'-'A'] = 5;
+    // Edge from B to C with weight 6
+    matrix['B'-'A']['C'-'A'] = 6;
+    matrix['C'-'A']['B'-'A'] = 6;
+    // Edge from C to E with weight 8
+    matrix['C'-'A']['E'-'A'] = 8;
+    matrix['E'-'A']['C'-'A'] = 8;
+    // Edge from B to E with weight 4
+    matrix['B'-'A']['E'-'A'] = 4;
+    matrix['E'-'A']['B'-'A'] = 4;
+    // Edge from A to E with weight 7
+    matrix['A'-'A']['E'-'A'] = 7;
+    matrix['E'-'A']['A'-'A'] = 7;
+    // Edge from D to E with weight 2
+    matrix['D'-'A']['E'-'A'] = 2;
+    matrix['E'-'A']['D'-'A'] = 2;
+    // Edge from A to D with weight 1
+    matrix['A'-'A']['D'-'A'] = 1;
+    matrix['D'-'A']['A'-'A'] = 1;
+    int vertices = 5; // number of vertices in the list
+    int edgeNumber = 26; // number of edges in the list
+    // Structure that holds list of edges. We initialize it by transforming the adjacency matrix to
+    // a list of edges by using the adjMatrixtoEdgeList function
+    edgeList *edges = adjMatrixtoEdgeList(matrix, &edgeNumber);
+    printf("Initial Graph:\n");
+    Print(edges, edgeNumber); // Print the initial graph
+    edgeList *MST = findMST(edges, edgeNumber); // Find the MST of the graph
+    printf("MST:\n");
+    Print(MST, vertices-1); // Print the MST. The number of edges = vertices-1 since each node (except the root) has an in-degree of 1
+    int sum=0;
+    for(int i=0; i<vertices-1; i++)
+        sum+=MST[i].w;
+    printf("\nSum of weights of edges in MST = %i\n", sum);
+
+
+    return 0;
+}
